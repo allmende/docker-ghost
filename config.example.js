@@ -46,7 +46,7 @@ config = {
             transport: 'SMTP',
             options: {
                 host: process.env.MAIL_HOST,
-                secureConnection: process.env.MAIL_SSL,
+                secureConnection: true,
                 port: process.env.MAIL_PORT,
                 auth: {
                     user: process.env.MAIL_USERNAME,
@@ -56,9 +56,13 @@ config = {
             from: process.env.MAIL_FROM
         },
         database: {
-            client: 'sqlite3',
+            client: 'mysql',
             connection: {
-                filename: path.join(__dirname, '/content/data/ghost.db')
+                host     : process.env.MYSQL_HOST,
+                user     : process.env.MYSQL_USER,
+                password : process.env.MYSQL_PASSWORD,
+                database : process.env.MYSQL_DATABASE,
+                charset  : 'utf8'
             },
             debug: false
         },

@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+
+  mariadb:
+    image: 'mariadb'
+    volumes:
+      - '/srv/docker-state/ghost/mariadb/:/var/lib/mysql'
+    env_file:
+      - back-tier.env
+    networks:
+      - back-tier
+
+  web:
+    build: .
+    command: ["npm", "start", "--production"]
+    expose:
+      - '2368'
+    volumes:
+      - '/srv/docker-state/ghost/web/:/var/lib/ghost'
+    links:
+      - mariadb
+    env_file:
+      - front-tier.env
+      - ghost.env
+      - back-tier.env
+    networks:
+      - front-tier
+      - back-tier
+
+networks:
+  front-tier:
+    external:
+      name: nginx_default
+  back-tier:
+    driver: bridge
